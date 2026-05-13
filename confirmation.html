@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase - Order Confirmed</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">🛒 ShopEase</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<div class="container" style="margin-top:40px;">
+    <div class="confirmation-box">
+        <div class="icon">✅</div>
+        <h2>Order Confirmed!</h2>
+        <p id="thank-you-msg"></p>
+        <p id="email-msg"></p>
+
+        <div class="order-summary">
+            <h3 style="margin-bottom:15px;color:#2c3e50;">📋 Order Summary</h3>
+            <p>Order Number: <span id="order-number"></span></p>
+            <p>Date: <span id="order-date"></span></p>
+            <p>Product: <span id="order-product"></span></p>
+            <p>Quantity: <span id="order-qty"></span></p>
+            <p>Payment Method: <span id="order-payment"></span></p>
+            <hr style="margin:15px 0;border:none;border-top:1px solid #ddd;">
+            <p style="font-size:18px;">Total Paid: <span id="order-total" style="color:#27ae60;font-size:22px;"></span></p>
+        </div>
+
+        <div class="alert alert-success" style="text-align:left;" id="payment-msg"></div>
+
+        <p style="color:#777;font-size:14px;margin-top:10px;">Expected delivery: <strong>3-5 business days</strong></p>
+
+        <div style="margin-top:25px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap;">
+            <a href="products.html" class="btn">🛍️ Continue Shopping</a>
+            <a href="index.html" class="btn" style="background:#555;">🏠 Go Home</a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 ShopEase. All rights reserved. | <a href="contact.html">Contact Us</a></p>
+</footer>
+
+<script>
+    var params  = new URLSearchParams(window.location.search);
+    var name    = params.get('name')    || 'Customer';
+    var email   = params.get('email')   || '';
+    var product = params.get('product') || 'Unknown';
+    var qty     = params.get('qty')     || '1';
+    var total   = params.get('total')   || '0.00';
+    var payment = params.get('payment') || 'N/A';
+
+    var orderNum  = 'ORD-' + String(Date.now()).slice(-6);
+    var orderDate = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+    document.getElementById('thank-you-msg').innerHTML  = 'Thank you, <strong>' + name + '</strong>! Your order has been placed successfully.';
+    document.getElementById('email-msg').innerHTML      = 'A confirmation will be sent to: <strong>' + email + '</strong>';
+    document.getElementById('order-number').textContent = orderNum;
+    document.getElementById('order-date').textContent   = orderDate;
+    document.getElementById('order-product').textContent = product;
+    document.getElementById('order-qty').textContent    = qty;
+    document.getElementById('order-payment').textContent = payment;
+    document.getElementById('order-total').textContent  = '$' + total;
+    document.getElementById('payment-msg').innerHTML    = '💳 <strong>Payment Simulated Successfully</strong> — In a real store, your ' + payment + ' would be charged $' + total + '.';
+</script>
+
+</body>
+</html>

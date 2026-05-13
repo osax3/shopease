@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase - Place Order</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">🛒 ShopEase</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html" class="active">Products</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+</nav>
+
+<div class="hero" style="padding: 40px 20px;">
+    <h1>Place Your Order</h1>
+    <p>Fill in your details and we'll deliver it to you.</p>
+</div>
+
+<div class="container">
+    <div class="form-wrapper">
+
+        <div id="product-info" style="text-align:center;margin-bottom:20px;padding:15px;background:#f0f7ff;border-radius:8px;">
+        </div>
+
+        <div id="error-box" class="alert alert-error" style="display:none;"></div>
+
+        <form id="order-form">
+            <h2>Delivery Information</h2>
+
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" id="name" placeholder="e.g. Ahmad Al-Hatamleh" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" id="email" placeholder="e.g. student@university.edu" required>
+            </div>
+
+            <div class="form-group">
+                <label>Delivery Address *</label>
+                <textarea id="address" placeholder="Street, City, Country" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Quantity *</label>
+                <input type="number" id="quantity" min="1" max="20" value="1" required>
+            </div>
+
+            <h2 style="margin-top:20px;">Payment Method</h2>
+
+            <div class="form-group">
+                <label>Select Payment Method *</label>
+                <select id="payment" required>
+                    <option value="">-- Choose a method --</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="Cash on Delivery">Cash on Delivery</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn">Confirm Order 🛒</button>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 ShopEase. All rights reserved. | <a href="contact.html">Contact Us</a></p>
+</footer>
+
+<script>
+    var params = new URLSearchParams(window.location.search);
+    var productName  = params.get('name')  || 'Unknown Product';
+    var productPrice = parseFloat(params.get('price')) || 0;
+
+    document.getElementById('product-info').innerHTML =
+        '<h3 style="color:#2c3e50;margin-top:8px;">' + productName + '</h3>' +
+        '<p style="color:#e74c3c;font-weight:bold;font-size:18px;">$' + productPrice.toFixed(2) + ' each</p>';
+
+    document.getElementById('order-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var name     = document.getElementById('name').value.trim();
+        var email    = document.getElementById('email').value.trim();
+        var address  = document.getElementById('address').value.trim();
+        var qty      = parseInt(document.getElementById('quantity').value);
+        var payment  = document.getElementById('payment').value;
+        var errors   = [];
+
+        if (name === '')    errors.push('Full name is required.');
+        if (email === '')   errors.push('Email address is required.');
+        if (address === '') errors.push('Delivery address is required.');
+        if (qty < 1 || qty > 20) errors.push('Quantity must be between 1 and 20.');
+        if (payment === '') errors.push('Please select a payment method.');
+
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email !== '' && !emailPattern.test(email)) {
+            errors.push('Please enter a valid email address.');
+        }
+
+        var errorBox = document.getElementById('error-box');
+        if (errors.length > 0) {
+            errorBox.style.display = 'block';
+            errorBox.innerHTML = '<strong>Please fix the following:</strong><ul style="margin-top:8px;padding-left:20px;">';
+            for (var i = 0; i < errors.length; i++) {
+                errorBox.innerHTML += '<li>' + errors[i] + '</li>';
+            }
+            errorBox.innerHTML += '</ul>';
+            return;
+        }
+
+        errorBox.style.display = 'none';
+
+        var total = (productPrice * qty).toFixed(2);
+
+        var query = 'name='    + encodeURIComponent(name)
+                  + '&email='   + encodeURIComponent(email)
+                  + '&product=' + encodeURIComponent(productName)
+                  + '&qty='     + qty
+                  + '&total='   + total
+                  + '&payment=' + encodeURIComponent(payment);
+
+        window.location.href = 'confirmation.html?' + query;
+    });
+</script>
+
+</body>
+</html>
